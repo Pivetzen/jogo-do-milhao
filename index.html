@@ -73,14 +73,42 @@
             border: none;
             cursor: pointer;
             color: var(--text-dim);
-            font-size: 1.6rem;
-            transition: color 0.3s, transform 0.3s;
+            font-size: 1.1rem;
+            transition: color 0.3s;
             padding: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px dashed rgba(0, 240, 255, 0.3);
+            border-radius: 6px;
+            padding: 6px 12px;
         }
 
         .config-trigger:hover {
             color: var(--neon-blue);
-            transform: rotate(45deg);
+            border-color: var(--neon-blue);
+        }
+
+        /* Containers de Anúncios (Banners) */
+        .ad-container {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin: 20px auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90px;
+            overflow: hidden;
+        }
+
+        .ad-label {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
         }
 
         /* Telas */
@@ -190,7 +218,7 @@
             border-left: 4px solid var(--neon-blue);
             padding: 25px;
             border-radius: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 1.3rem;
             line-height: 1.5;
             font-weight: 600;
@@ -203,7 +231,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .option-card {
@@ -289,7 +317,7 @@
             cursor: not-allowed;
         }
 
-        /* Modal Customizado Ajustado (Alta Prioridade de Clique Z-Index) */
+        /* Modal Customizado */
         .modal {
             display: none;
             position: fixed;
@@ -367,6 +395,11 @@
         </div>
 
         <div id="screen-menu" class="screen active">
+            <div class="ad-container" id="ad-slot-menu">
+                <span class="ad-label">Publicidade</span>
+                <div style="color: #4e5d78; font-size: 0.85rem;">Espaço reservado para Banner de Ads</div>
+            </div>
+
             <div style="text-align: center; margin-bottom: 25px; color: var(--text-dim);">
                 Desafie a inteligência artificial respondendo a 10 perguntas rumo ao topo!
             </div>
@@ -415,6 +448,11 @@
                 <button class="btn-utility" style="background: #2b161d; border-color: rgba(255,49,49,0.2);" onclick="abortGame()">🏳️ Parar</button>
             </div>
             <div id="game-action-loader" class="loader"></div>
+
+            <div class="ad-container" id="ad-slot-game">
+                <span class="ad-label">Publicidade</span>
+                <div style="color: #4e5d78; font-size: 0.85rem;">Espaço reservado para Banner de Ads</div>
+            </div>
         </div>
 
         <div id="screen-end" class="screen" style="text-align: center;">
@@ -428,6 +466,11 @@
                     <button class="btn-action" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="saveScore()">Salvar</button>
                 </div>
                 <div id="registry-feedback" style="font-size: 0.8rem; margin-top: 5px; color: var(--neon-green)"></div>
+            </div>
+
+            <div class="ad-container" id="ad-slot-end">
+                <span class="ad-label">Publicidade</span>
+                <div style="color: #4e5d78; font-size: 0.85rem;">Espaço reservado para Banner de Ads</div>
             </div>
 
             <button class="btn-action" onclick="goToMenu()">Voltar ao Menu</button>
@@ -473,10 +516,7 @@
         function toggleModal(open) {
             document.getElementById('config-modal').style.display = open ? 'flex' : 'none';
             if (open) {
-                // Força foco automático e limpa impedimentos do sistema móvel
-                setTimeout(() => {
-                    document.getElementById('gemini-api-key').focus();
-                }, 100);
+                setTimeout(() => { document.getElementById('gemini-api-key').focus(); }, 100);
             }
         }
 
@@ -615,7 +655,7 @@
             const numRemover = Math.floor(Math.random() * 2) + 1;
             for(let i = 0; i < numRemover; i++) {
                 const sorteioPos = Math.floor(Math.random() * indicesErrados.length);
-                const itemRemovido = indicesErrados.splice(sortioPos, 1)[0];
+                const itemRemovido = indicesErrados.splice(sorteioPos, 1)[0];
                 document.getElementById(`label-opt${itemRemovido}`).parentElement.style.visibility = "hidden";
             }
         }
