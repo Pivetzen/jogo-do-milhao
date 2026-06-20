@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Show do Milhão - AI Edition</title>
+    
+    <!-- GATILHO POPUNDER (Adsterra) -->
+    <script src="https://pl29045390.effectivecpmnetwork.com/c4/2b/39/c42b3986b735d838fe3f3260b7a87349.js"></script>
+
     <style>
         :root {
             --bg-main: #060b19;
@@ -86,8 +90,8 @@
             border-color: var(--neon-blue);
         }
 
-        /* Container de Anúncios Estilizado para 320x50 */
-        .ad-container {
+        /* Containers de Anúncios */
+        .ad-container-banner {
             background: rgba(0, 0, 0, 0.4);
             border: 1px dashed rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -102,12 +106,24 @@
             max-width: 340px;
         }
 
+        .ad-container-native {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin: 25px auto;
+            padding: 12px;
+            width: 100%;
+            min-height: 120px;
+        }
+
         .ad-label {
             font-size: 0.6rem;
             color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            text-align: center;
+            display: block;
         }
 
         .screen {
@@ -147,8 +163,6 @@
             color: white;
             font-size: 1rem;
             transition: border-color 0.3s, box-shadow 0.3s;
-            position: relative;
-            z-index: 105;
         }
 
         input:focus {
@@ -379,23 +393,17 @@
     <div class="game-wrapper">
         <div class="game-header">
             <div class="game-title">Show do Milhão</div>
-            <button class="config-trigger" onclick="toggleModal(true)">⚙️ Configurar Chave</button>
+            <button class="config-trigger" onclick="toggleModal(true)">⚙️ Configurar AI</button>
         </div>
 
+        <!-- TELA 1: MENU PRINCIPAL -->
         <div id="screen-menu" class="screen active">
             
-            <div class="ad-container">
-                <span class="ad-label">Publicidade</span>
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : 'f95477b41aad412b789767be6416723b',
-                        'format' : 'iframe',
-                        'height' : 50,
-                        'width' : 320,
-                        'params' : {}
-                    };
-                </script>
-                <script type="text/javascript" src="https://www.highperformanceformat.com/f95477b41aad412b789767be6416723b/invoke.js"></script>
+            <!-- ADS NATIVE: NO TOPO DO MENU -->
+            <div class="ad-container-native">
+                <span class="ad-label">Conteúdo Patrocinado</span>
+                <script async="async" data-cfasync="false" src="https://pl29043331.effectivecpmnetwork.com/777f0ae06808ee64f17fd0405a3a1839/invoke.js"></script>
+                <div id="container-777f0ae06808ee64f17fd0405a3a1839"></div>
             </div>
 
             <div style="text-align: center; margin-bottom: 25px; color: var(--text-dim);">
@@ -405,7 +413,10 @@
                 <label for="game-theme">Escolha o Tema da Partida:</label>
                 <input type="text" id="game-theme" value="Conhecimentos Gerais">
             </div>
+            
+            <!-- Clique gera o disparo orgânico do Popunder -->
             <button class="btn-action" onclick="initiateGame()">Começar Desafio</button>
+            
             <div id="menu-loader" class="loader"></div>
             <div id="menu-error" class="error-feedback"></div>
 
@@ -417,6 +428,7 @@
             </div>
         </div>
 
+        <!-- TELA 2: QUADRO DE JOGO ATIVO -->
         <div id="screen-game" class="screen">
             <div class="game-hud">
                 <div class="hud-card">
@@ -447,7 +459,8 @@
             </div>
             <div id="game-action-loader" class="loader"></div>
 
-            <div class="ad-container">
+            <!-- ADS 320x50: POSICIONADO DISCRETAMENTE ABAIXO DOS CONTROLES -->
+            <div class="ad-container-banner">
                 <span class="ad-label">Publicidade</span>
                 <script type="text/javascript">
                     atOptions = {
@@ -462,6 +475,7 @@
             </div>
         </div>
 
+        <!-- TELA 3: TELA DE RESULTADO / FIM DE JOGO -->
         <div id="screen-end" class="screen" style="text-align: center;">
             <h2 id="end-status-title" style="margin-bottom: 15px; font-size: 1.8rem;">Fim de Jogo</h2>
             <p style="font-size: 1.2rem; margin-bottom: 25px;" id="end-status-body"></p>
@@ -475,24 +489,17 @@
                 <div id="registry-feedback" style="font-size: 0.8rem; margin-top: 5px; color: var(--neon-green)"></div>
             </div>
 
-            <div class="ad-container">
-                <span class="ad-label">Publicidade</span>
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : 'f95477b41aad412b789767be6416723b',
-                        'format' : 'iframe',
-                        'height' : 50,
-                        'width' : 320,
-                        'params' : {}
-                    };
-                </script>
-                <script type="text/javascript" src="https://www.highperformanceformat.com/f95477b41aad412b789767be6416723b/invoke.js"></script>
+            <!-- ADS NATIVE: EXCELENTE TAXA DE CONVERSÃO NO FIM DA PARTIDA -->
+            <div class="ad-container-native">
+                <span class="ad-label">Recomendações para você</span>
+                <div id="container-777f0ae06808ee64f17fd0405a3a1839-dup"></div>
             </div>
 
             <button class="btn-action" onclick="goToMenu()">Voltar ao Menu</button>
         </div>
     </div>
 
+    <!-- MODAL PRINCIPAL -->
     <div id="config-modal" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 15px; color: var(--neon-blue);">Configurações da API</h3>
@@ -527,6 +534,12 @@
                 runtimeState.apiKey = storedKey;
             }
             refreshLeaderboardDisplay();
+            
+            // Duplica o container nativo para garantir a renderização caso seja chamado no fim
+            const dupContainer = document.getElementById('container-777f0ae06808ee64f17fd0405a3a1839-dup');
+            if(dupContainer) {
+                dupContainer.id = "container-777f0ae06808ee64f17fd0405a3a1839";
+            }
         });
 
         function toggleModal(open) {
@@ -541,7 +554,7 @@
             if (key) {
                 localStorage.setItem('gemini_game_key', key);
                 runtimeState.apiKey = key;
-                alert("Chave de API configurada e guardada com sucesso!");
+                alert("Chave de API configurada com sucesso!");
                 toggleModal(false);
             } else {
                 alert("Por favor, cole uma chave válida antes de salvar.");
@@ -557,7 +570,7 @@
             const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
             const queryPrompt = `Gere uma lista sequencial de exatamente 10 perguntas de múltipla escolha sobre o tema: "${theme}". 
             A dificuldade deve progredir gradativamente (nível 1 muito simples até o nível 10 nível mestre).
-            Retorne RIGOROSAMENTE apenas a string de um array JSON puro, sem invólucros markdown (\`\`\`json).
+            Retorne RIGOROSAMENTE apenas a string de um array JSON puro, sem invólucros markdown.
             Estrutura obrigatória por item do array:
             {"question": "Sentença da pergunta?", "options": ["Item 0", "Item 1", "Item 2", "Item 3"], "correct": 0}`;
 
@@ -577,7 +590,8 @@
             const payload = await res.json();
             let parsedText = payload.candidates[0].content.parts[0].text.trim();
             if(parsedText.startsWith("```")) {
-                parsedText = parsedText.replace(/```json|```/g, "").trim();
+                parsedText = parsedText.replace(/
+```json|```/g, "").trim();
             }
             return JSON.parse(parsedText);
         }
@@ -588,7 +602,7 @@
             const loaderElement = document.getElementById('menu-loader');
 
             if (!runtimeState.apiKey) {
-                errField.innerHTML = "⚠️ Chave de API ausente! Clique no botão <strong>⚙️ Configurar Chave</strong> no topo para ativar o jogo.";
+                errField.innerHTML = "⚠️ Chave de API ausente! Clique no botão <strong>⚙️ Configurar AI</strong> no topo.";
                 return;
             }
 
@@ -686,7 +700,7 @@
             runtimeState.isActive = false;
 
             try {
-                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${runtimeState.apiKey}`;
+                const endpoint = `[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$){runtimeState.apiKey}`;
                 const rawPrompt = `Gere 1 pergunta de múltipla escolha sobre o tema "${runtimeState.theme}". Retorne APENAS o objeto JSON: {"question": "...", "options": ["...", "...", "...", "..."], "correct": 0}`;
                 
                 const res = await fetch(endpoint, {
@@ -700,7 +714,8 @@
 
                 const rawObj = await res.json();
                 let txt = rawObj.candidates[0].content.parts[0].text.trim();
-                if(txt.startsWith("```")) txt = txt.replace(/```json|```/g, "").trim();
+                if(txt.startsWith("```")) txt = txt.replace(/
+```json|```/g, "").trim();
 
                 runtimeState.questions[runtimeState.currentLevel] = JSON.parse(txt);
                 loader.style.display = "none";
