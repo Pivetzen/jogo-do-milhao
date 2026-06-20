@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Show do Milhão - AI Edition</title>
     
-    <!-- GATILHO POPUNDER (Adsterra) -->
-    <script src="https://pl29045390.effectivecpmnetwork.com/c4/2b/39/c42b3986b735d838fe3f3260b7a87349.js"></script>
+    <script async src="https://pl29045390.effectivecpmnetwork.com/c4/2b/39/c42b3986b735d838fe3f3260b7a87349.js"></script>
 
     <style>
         :root {
@@ -48,7 +47,7 @@
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 240, 255, 0.05);
             position: relative;
             backdrop-filter: blur(10px);
-            z-index: 1;
+            z-index: 10;
         }
 
         .game-header {
@@ -57,6 +56,7 @@
             align-items: center;
             margin-bottom: 25px;
             position: relative;
+            z-index: 20;
         }
 
         .game-title {
@@ -77,12 +77,13 @@
             color: var(--text-dim);
             font-size: 1.1rem;
             transition: color 0.3s;
-            padding: 5px;
             text-transform: uppercase;
             letter-spacing: 1px;
             border: 1px dashed rgba(0, 240, 255, 0.3);
             border-radius: 6px;
             padding: 6px 12px;
+            position: relative;
+            z-index: 30;
         }
 
         .config-trigger:hover {
@@ -90,7 +91,7 @@
             border-color: var(--neon-blue);
         }
 
-        /* Containers de Anúncios */
+        /* Containers de Anúncios Protegidos */
         .ad-container-banner {
             background: rgba(0, 0, 0, 0.4);
             border: 1px dashed rgba(255, 255, 255, 0.1);
@@ -113,7 +114,7 @@
             margin: 25px auto;
             padding: 12px;
             width: 100%;
-            min-height: 120px;
+            min-height: 140px;
         }
 
         .ad-label {
@@ -143,6 +144,8 @@
         .input-group {
             margin-bottom: 20px;
             text-align: left;
+            position: relative;
+            z-index: 15;
         }
 
         label {
@@ -185,6 +188,8 @@
             box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
             transition: all 0.2s ease;
             width: 100%;
+            position: relative;
+            z-index: 15;
         }
 
         .btn-action:hover {
@@ -372,8 +377,6 @@
             border-bottom: 1px dashed rgba(255,255,255,0.03);
         }
 
-        .leaderboard-item:last-child { border: none; }
-
         .loader {
             border: 4px solid rgba(0, 240, 255, 0.1);
             border-top: 4px solid var(--neon-blue);
@@ -396,10 +399,8 @@
             <button class="config-trigger" onclick="toggleModal(true)">⚙️ Configurar AI</button>
         </div>
 
-        <!-- TELA 1: MENU PRINCIPAL -->
         <div id="screen-menu" class="screen active">
             
-            <!-- ADS NATIVE: NO TOPO DO MENU -->
             <div class="ad-container-native">
                 <span class="ad-label">Conteúdo Patrocinado</span>
                 <script async="async" data-cfasync="false" src="https://pl29043331.effectivecpmnetwork.com/777f0ae06808ee64f17fd0405a3a1839/invoke.js"></script>
@@ -414,7 +415,6 @@
                 <input type="text" id="game-theme" value="Conhecimentos Gerais">
             </div>
             
-            <!-- Clique gera o disparo orgânico do Popunder -->
             <button class="btn-action" onclick="initiateGame()">Começar Desafio</button>
             
             <div id="menu-loader" class="loader"></div>
@@ -428,7 +428,6 @@
             </div>
         </div>
 
-        <!-- TELA 2: QUADRO DE JOGO ATIVO -->
         <div id="screen-game" class="screen">
             <div class="game-hud">
                 <div class="hud-card">
@@ -459,23 +458,11 @@
             </div>
             <div id="game-action-loader" class="loader"></div>
 
-            <!-- ADS 320x50: POSICIONADO DISCRETAMENTE ABAIXO DOS CONTROLES -->
-            <div class="ad-container-banner">
+            <div class="ad-container-banner" id="banner-game-slot">
                 <span class="ad-label">Publicidade</span>
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : 'f95477b41aad412b789767be6416723b',
-                        'format' : 'iframe',
-                        'height' : 50,
-                        'width' : 320,
-                        'params' : {}
-                    };
-                </script>
-                <script type="text/javascript" src="https://www.highperformanceformat.com/f95477b41aad412b789767be6416723b/invoke.js"></script>
             </div>
         </div>
 
-        <!-- TELA 3: TELA DE RESULTADO / FIM DE JOGO -->
         <div id="screen-end" class="screen" style="text-align: center;">
             <h2 id="end-status-title" style="margin-bottom: 15px; font-size: 1.8rem;">Fim de Jogo</h2>
             <p style="font-size: 1.2rem; margin-bottom: 25px;" id="end-status-body"></p>
@@ -489,22 +476,19 @@
                 <div id="registry-feedback" style="font-size: 0.8rem; margin-top: 5px; color: var(--neon-green)"></div>
             </div>
 
-            <!-- ADS NATIVE: EXCELENTE TAXA DE CONVERSÃO NO FIM DA PARTIDA -->
-            <div class="ad-container-native">
-                <span class="ad-label">Recomendações para você</span>
-                <div id="container-777f0ae06808ee64f17fd0405a3a1839-dup"></div>
+            <div class="ad-container-banner" id="banner-end-slot">
+                <span class="ad-label">Recomendações</span>
             </div>
 
             <button class="btn-action" onclick="goToMenu()">Voltar ao Menu</button>
         </div>
     </div>
 
-    <!-- MODAL PRINCIPAL -->
     <div id="config-modal" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 15px; color: var(--neon-blue);">Configurações da API</h3>
             <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px;">
-                Cole sua chave do Gemini abaixo. Ela é salva de forma segura apenas no armazenamento do seu navegador.
+                Cole sua chave do Gemini abaixo. Ela é salva de forma segura apenas no armazenamento local do seu navegador.
             </p>
             <div class="input-group">
                 <label for="gemini-api-key">Gemini API Key:</label>
@@ -527,6 +511,30 @@
             perks: { cards: true, skip: true }
         };
 
+        // Injeta de forma assíncrona os scripts do banner nos containers isolados para não quebrar a engrenagem
+        function injectBanners() {
+            const gameSlot = document.getElementById('banner-game-slot');
+            const endSlot = document.getElementById('banner-end-slot');
+            
+            const createAdStructure = () => {
+                const fragment = document.createDocumentFragment();
+                const configScript = document.createElement('script');
+                configScript.type = 'text/javascript';
+                configScript.text = `atOptions = { 'key' : 'f95477b41aad412b789767be6416723b', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };`;
+                
+                const invokeScript = document.createElement('script');
+                invokeScript.type = 'text/javascript';
+                invokeScript.src = 'https://www.highperformanceformat.com/f95477b41aad412b789767be6416723b/invoke.js';
+                
+                fragment.appendChild(configScript);
+                fragment.appendChild(invokeScript);
+                return fragment;
+            };
+
+            if(gameSlot) gameSlot.appendChild(createAdStructure());
+            if(endSlot) endSlot.appendChild(createAdStructure());
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const storedKey = localStorage.getItem('gemini_game_key');
             if (storedKey) {
@@ -534,12 +542,7 @@
                 runtimeState.apiKey = storedKey;
             }
             refreshLeaderboardDisplay();
-            
-            // Duplica o container nativo para garantir a renderização caso seja chamado no fim
-            const dupContainer = document.getElementById('container-777f0ae06808ee64f17fd0405a3a1839-dup');
-            if(dupContainer) {
-                dupContainer.id = "container-777f0ae06808ee64f17fd0405a3a1839";
-            }
+            injectBanners();
         });
 
         function toggleModal(open) {
@@ -590,8 +593,7 @@
             const payload = await res.json();
             let parsedText = payload.candidates[0].content.parts[0].text.trim();
             if(parsedText.startsWith("```")) {
-                parsedText = parsedText.replace(/
-```json|```/g, "").trim();
+                parsedText = parsedText.replace(/```json|```/g, "").trim();
             }
             return JSON.parse(parsedText);
         }
@@ -602,7 +604,7 @@
             const loaderElement = document.getElementById('menu-loader');
 
             if (!runtimeState.apiKey) {
-                errField.innerHTML = "⚠️ Chave de API ausente! Clique no botão <strong>⚙️ Configurar AI</strong> no topo.";
+                errField.innerHTML = "⚠️ Chave de API ausente! Clique no botão <strong>⚙️ Configurar AI</strong> no topo para ativar.";
                 return;
             }
 
@@ -700,7 +702,7 @@
             runtimeState.isActive = false;
 
             try {
-                const endpoint = `[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$){runtimeState.apiKey}`;
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${runtimeState.apiKey}`;
                 const rawPrompt = `Gere 1 pergunta de múltipla escolha sobre o tema "${runtimeState.theme}". Retorne APENAS o objeto JSON: {"question": "...", "options": ["...", "...", "...", "..."], "correct": 0}`;
                 
                 const res = await fetch(endpoint, {
@@ -714,8 +716,7 @@
 
                 const rawObj = await res.json();
                 let txt = rawObj.candidates[0].content.parts[0].text.trim();
-                if(txt.startsWith("```")) txt = txt.replace(/
-```json|```/g, "").trim();
+                if(txt.startsWith("```")) txt = txt.replace(/```json|```/g, "").trim();
 
                 runtimeState.questions[runtimeState.currentLevel] = JSON.parse(txt);
                 loader.style.display = "none";
