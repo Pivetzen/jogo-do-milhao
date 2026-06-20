@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show do Milhão AI</title>
+    <style>
+        :root {
+            --primary-color: #0d1b2a;
+            --secondary-color: #1b263b;
+            --accent-color: #f1c40f;
+            --text-color: #ffffff;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(241, 196, 15, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        /* Config Screen */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-color);
+            background: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #f39c12 100%);
+            color: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        /* Game Screen */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.1rem;
+        }
+
+        .hud span strong {
+            color: var(--accent-color);
+        }
+
+        .question-box {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            min-height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        @media (min-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .option-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(241, 196, 15, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .option-btn strong {
+            color: var(--accent-color);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .option-btn.correct {
+            background-color: var(--success-color) !important;
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--danger-color) !important;
+            border-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Helplines */
+        .help-section {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .help-btn {
+            background: #34495e;
+            color: white;
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .help-btn:disabled {
+            background: #2c3e50;
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Loader */
+        .loader {
+            border: 5px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top: 5px solid var(--accent-color);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-msg {
+            color: var(--danger-color);
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Show do Milhão AI</h1>
+
+        <div id="setup-screen" class="screen active">
+            <div class="form-group">
+                <label for="api-key">Sua Gemini API Key:</label>
+                <input type="password" id="api-key" placeholder="AIzaSy...">
+                <small style="color: #bbb; display:block; margin-top:5px;">
+                    Obtenha uma chave gratuita no <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent-color);">Google AI Studio</a>.
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="theme">Tema das Perguntas:</label>
+                <input type="text" id="theme" value="Conhecimentos Gerais" placeholder="Ex: Star Wars, História do Brasil, Programação...">
+            </div>
+            <button onclick="startGame()">Iniciar Jogo</button>
+            <div id="setup-loader" class="loader"></div>
+            <div id="setup-error" class="error-msg"></div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div class="hud">
+                <span>Pergunta: <strong id="current-question-num">1/10</strong></span>
+                <span>Prêmio Atual: <strong id="current-prize">R$ 0</strong></span>
+            </div>
+
+            <div class="question-box" id="question-text">
+                Carregando pergunta premiada...
+            </div>
+
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkAnswer(0)"><strong>A</strong> <span id="opt0"></span></button>
+                <button class="option-btn" onclick="checkAnswer(1)"><strong>B</strong> <span id="opt1"></span></button>
+                <button class="option-btn" onclick="checkAnswer(2)"><strong>C</strong> <span id="opt2"></span></button>
+                <button class="option-btn" onclick="checkAnswer(3)"><strong>D</strong> <span id="opt3"></span></button>
+            </div>
+
+            <div class="help-section">
+                <button id="btn-cards" class="help-btn" onclick="useCards()">Cartas (Elimina opções)</button>
+                <button id="btn-skip" class="help-btn" onclick="useSkip()">Pular Pergunta</button>
+                <button class="help-btn" style="background:#e74c3c; color:white;" onclick="stopGame()">Parar</button>
+            </div>
+            <div id="game-loader" class="loader"></div>
+        </div>
+
+        <div id="end-screen" class="screen">
+            <h2 id="end-title" style="margin-bottom: 20px; color: var(--accent-color);">Fim de Jogo!</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 30px;" id="end-message"></p>
+            <button onclick="restartGame()">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Configurações do Jogo
+        const prizes = [
+            "R$ 1.000", "R$ 5.000", "R$ 10.000", "R$ 50.000", "R$ 100.000",
+            "R$ 300.000", "R$ 500.000", "R$ 800.000", "R$ 900.000", "R$ 1 MILHÃO"
+        ];
+        
+        let gameState = {
+            apiKey: "",
+            theme: "",
+            currentLevel: 0, 
+            questions: [],
+            currentQuestion: null,
+            canPlay: true,
+            helps: { cards: true, skip: true }
+        };
+
+        // Gerencia telas
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Requisição para a API do Gemini
+        async function fetchQuestionsFromAI(apiKey, theme) {
+            // Usando o modelo estável mais recente do Gemini 2.5 Flash
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            
+            const prompt = `Gere uma lista com exatamente 10 perguntas de múltipla escolha sobre o tema: "${theme}". 
+            As perguntas devem ir progredindo em nível de dificuldade (as primeiras fáceis, as últimas muito difíceis).
+            Retorne RIGOROSAMENTE apenas um array no formato JSON puro, sem marcações markdown de bloco de código (como \`\`\`json).
+            Cada objeto do array deve ter o seguinte formato de propriedades:
+            {
+                "question": "Texto da pergunta aqui?",
+                "options": ["Opção A", "Opção B", "Opção C", "Opção D"],
+                "correct": 0
+            }
+            Onde "correct" é o índice da resposta certa (0 para A, 1 para B, 2 para C ou 3 para D).`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { responseMimeType: "application/json" }
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error?.message || "Falha na comunicação com o Gemini.");
+            }
+
+            const data = await response.json();
+            let textResponse = data.candidates[0].content.parts[0].text.trim();
+            
+            // Sanitização preventiva caso o modelo ignore a instrução de ocultar o markdown
+            if(textResponse.startsWith("```")) {
+                textResponse = textResponse.replace(/```json|```/g, "").trim();
+            }
+
+            return JSON.parse(textResponse);
+        }
+
+        async function startGame() {
+            const apiKeyInput = document.getElementById('api-key').value.trim();
+            const themeInput = document.getElementById('theme').value.trim() || "Conhecimentos Gerais";
+            const errorDiv = document.getElementById('setup-error');
+            const loader = document.getElementById('setup-loader');
+
+            if (!apiKeyInput) {
+                errorDiv.innerText = "Por favor, insira a sua Gemini API Key.";
+                return;
+            }
+
+            errorDiv.innerText = "";
+            loader.style.display = "block";
+
+            try {
+                const questions = await fetchQuestionsFromAI(apiKeyInput, themeInput);
+                
+                if(!Array.isArray(questions) || questions.length < 10) {
+                    throw new Error("A IA gerou um formato inválido. Tente iniciar o jogo novamente.");
+                }
+
+                gameState.apiKey = apiKeyInput;
+                gameState.theme = themeInput;
+                gameState.questions = questions;
+                gameState.currentLevel = 0;
+                gameState.helps = { cards: true, skip: true };
+
+                loader.style.display = "none";
+                showScreen('game-screen');
+                renderQuestion();
+
+            } catch (error) {
+                console.error(error);
+                loader.style.display = "none";
+                errorDiv.innerText = "Erro ao carregar perguntas: " + error.message;
+            }
+        }
+
+        function renderQuestion() {
+            gameState.canPlay = true;
+            resetOptionStyles();
+
+            // Atualiza botões de ajuda visivelmente
+            document.getElementById('btn-cards').disabled = !gameState.helps.cards;
+            document.getElementById('btn-skip').disabled = !gameState.helps.skip;
+
+            if (gameState.currentLevel >= 10) {
+                winGame();
+                return;
+            }
+
+            gameState.currentQuestion = gameState.questions[gameState.currentLevel];
+
+            document.getElementById('current-question-num').innerText = `${gameState.currentLevel + 1}/10`;
+            document.getElementById('current-prize').innerText = prizes[gameState.currentLevel];
+            document.getElementById('question-text').innerText = gameState.currentQuestion.question;
+
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`opt${i}`).innerText = gameState.currentQuestion.options[i];
+                document.getElementById(`opt${i}`).parentElement.style.visibility = "visible";
+            }
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (!gameState.canPlay) return;
+            gameState.canPlay = false;
+
+            const correctIndex = gameState.currentQuestion.correct;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            if (selectedIndex === correctIndex) {
+                buttons[selectedIndex].classList.add('correct');
+                setTimeout(() => {
+                    gameState.currentLevel++;
+                    if (gameState.currentLevel < 10) {
+                        renderQuestion();
+                    } else {
+                        winGame();
+                    }
+                }, 1500);
+            } else {
+                buttons[selectedIndex].classList.add('wrong');
+                buttons[correctIndex].classList.add('correct');
+                setTimeout(() => {
+                    gameOver();
+                }, 2000);
+            }
+        }
+
+        // Ajuda: Cartas (Elimina aleatoriamente entre 1 e 2 alternativas erradas)
+        function useCards() {
+            if (!gameState.helps.cards || !gameState.canPlay) return;
+            gameState.helps.cards = false;
+            document.getElementById('btn-cards').disabled = true;
+
+            const correct = gameState.currentQuestion.correct;
+            let wrongIndexes = [0, 1, 2, 3].filter(i => i !== correct);
+            
+            // Sorteia para remover 1 ou 2 opções erradas da tela
+            const itemsToRemove = Math.floor(Math.random() * 2) + 1; 
+            for(let i = 0; i < itemsToRemove; i++) {
+                const randIdx = Math.floor(Math.random() * wrongIndexes.length);
+                const removedId = wrongIndexes.splice(randIdx, 1)[0];
+                document.getElementById(`opt${removedId}`).parentElement.style.visibility = "hidden";
+            }
+        }
+
+        // Ajuda: Pular pergunta (Busca uma nova pergunta avulsa do mesmo tema na IA)
+        async function useSkip() {
+            if (!gameState.helps.skip || !gameState.canPlay) return;
+            gameState.helps.skip = false;
+            document.getElementById('btn-skip').disabled = true;
+
+            const loader = document.getElementById('game-loader');
+            loader.style.display = "block";
+            gameState.canPlay = false;
+
+            try {
+                // Solicita uma pergunta de reposição
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${gameState.apiKey}`;
+                const prompt = `Gere exatamente 1 pergunta de múltipla escolha sobre o tema: "${gameState.theme}". Dificuldade correspondente ao nível intermediário/avançado. Retorne estritamente um objeto JSON puro sem tags markdown: {"question": "...", "options": ["...", "...", "...", "..."], "correct": 0}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+
+                const data = await response.json();
+                let textResponse = data.candidates[0].content.parts[0].text.trim();
+                if(textResponse.startsWith("```")) {
+                    textResponse = textResponse.replace(/```json|```/g, "").trim();
+                }
+
+                const newQuestion = JSON.parse(textResponse);
+                gameState.questions[gameState.currentLevel] = newQuestion;
+                
+                loader.style.display = "none";
+                renderQuestion();
+
+            } catch (error) {
+                console.error(error);
+                loader.style.display = "none";
+                gameState.canPlay = true;
+                alert("Erro ao tentar pular: não conseguimos gerar uma nova pergunta.");
+            }
+        }
+
+        function stopGame() {
+            if(!gameState.canPlay) return;
+            const prizeEarned = gameState.currentLevel === 0 ? "R$ 0" : prizes[gameState.currentLevel - 1];
+            showScreen('end-screen');
+            document.getElementById('end-title').innerText = "Você Parou!";
+            document.getElementById('end-message').innerText = `Você agiu com sabedoria e levou para casa: ${prizeEarned}!`;
+        }
+
+        function gameOver() {
+            let prizeEarned = "R$ 0";
+            if (gameState.currentLevel >= 5) prizeEarned = "R$ 50.000"; // Margem de segurança fictícia do jogo
+            
+            showScreen('end-screen');
+            document.getElementById('end-title').innerText = "Você Errou!";
+            document.getElementById('end-message').innerText = `Infelizmente a resposta não era essa. Você sai do jogo com: ${prizeEarned}`;
+        }
+
+        function winGame() {
+            showScreen('end-screen');
+            document.getElementById('end-title').innerText = "Parabéns! O Mais Novo Milionário!";
+            document.getElementById('end-message').innerText = "Você respondeu todas as perguntas corretamente e conquistou o prêmio máximo de R$ 1 MILHÃO!";
+        }
+
+        function resetOptionStyles() {
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('correct', 'wrong');
+            });
+        }
+
+        function restartGame() {
+            document.getElementById('setup-error').innerText = "";
+            showScreen('setup-screen');
+        }
+    </script>
+</body>
+</html>
