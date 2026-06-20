@@ -3,527 +3,743 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show do Milhão AI</title>
+    <title>Show do Milhão - AI Edition</title>
     <style>
         :root {
-            --primary-color: #0d1b2a;
-            --secondary-color: #1b263b;
-            --accent-color: #f1c40f;
-            --text-color: #ffffff;
-            --success-color: #2ecc71;
-            --danger-color: #e74c3c;
+            --bg-main: #060b19;
+            --bg-card: #0d1527;
+            --neon-blue: #00f0ff;
+            --neon-gold: #ffb703;
+            --neon-green: #39ff14;
+            --neon-red: #ff3131;
+            --text-main: #ffffff;
+            --text-dim: #8a99ad;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background: radial-gradient(circle, var(--secondary-color) 0%, var(--primary-color) 100%);
-            color: var(--text-color);
+            background: radial-gradient(circle at center, #101f42 0%, var(--bg-main) 100%);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
 
-        .container {
+        /* Container Principal com Aspecto de Console de Jogos */
+        .game-wrapper {
             width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid var(--accent-color);
-            border-radius: 15px;
+            max-width: 750px;
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 0 30px rgba(241, 196, 15, 0.2);
-            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 240, 255, 0.05);
+            position: relative;
+            backdrop-filter: blur(10px);
         }
 
-        h1 {
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            font-size: 2.5rem;
+        /* Header e Botão Discreto de Configuração da API Key */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, var(--neon-blue), #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
         }
 
+        .config-trigger {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .config-trigger:hover {
+            color: var(--neon-blue);
+            transform: rotate(45deg);
+        }
+
+        /* Telas */
         .screen {
             display: none;
+            animation: fadeIn 0.4s ease-out forwards;
         }
 
         .active {
             display: block;
         }
 
-        /* Config Screen */
-        .form-group {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Inputs e Formulários Modernos */
+        .input-group {
             margin-bottom: 20px;
             text-align: left;
         }
 
         label {
             display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
             margin-bottom: 8px;
-            color: var(--accent-color);
-            font-weight: bold;
         }
 
-        input, select {
+        input {
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--accent-color);
-            background: var(--primary-color);
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #080d1a;
             color: white;
             font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        button {
-            background: linear-gradient(135deg, var(--accent-color) 0%, #f39c12 100%);
-            color: var(--primary-color);
+        input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        /* Botões Estilo Fliperama/Cyberpunk */
+        .btn-action {
+            background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
+            color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 14px 35px;
             font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 25px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
             text-transform: uppercase;
-            margin-top: 10px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+            transition: all 0.2s ease;
+            width: 100%;
         }
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--accent-color);
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 240, 255, 0.5);
         }
 
-        /* Game Screen */
-        .hud {
+        /* Painel HUD do Jogo */
+        .game-hud {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .hud-card {
+            background: #090f1d;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .hud-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .hud-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--neon-gold);
+        }
+
+        /* Caixa da Pergunta */
+        .question-container {
+            background: linear-gradient(180deg, #0f1930 0%, #090f1d 100%);
+            border-left: 4px solid var(--neon-blue);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            font-weight: 600;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Grid de Alternativas Remodeladas */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            background: #0f1930;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 16px 20px;
+            text-align: left;
+            color: white;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .option-card:hover:not(:disabled) {
+            background: #152446;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+        }
+
+        .option-prefix {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-blue);
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        /* Estados das Respostas */
+        .option-card.correct {
+            background: rgba(57, 255, 20, 0.15) !important;
+            border-color: var(--neon-green) !important;
+            color: var(--neon-green);
+            animation: pulseCorrect 0.3s ease infinite alternate;
+        }
+
+        .option-card.wrong {
+            background: rgba(255, 49, 49, 0.15) !important;
+            border-color: var(--neon-red) !important;
+            color: var(--neon-red);
+        }
+
+        @keyframes pulseCorrect {
+            to { box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
+        }
+
+        /* Botões Utilitários e de Ajuda */
+        .game-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-utility {
+            background: #14213d;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-utility:hover:not(:disabled) {
+            background: #1c315e;
+            border-color: var(--text-dim);
+        }
+
+        .btn-utility:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+        }
+
+        /* Modal Customizado (Discreto para a API Key) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--neon-blue);
+            border-radius: 15px;
+            padding: 25px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,240,255,0.2);
+        }
+
+        /* Placar de Líderes (Leaderboard) */
+        .leaderboard-box {
+            margin-top: 25px;
+            background: #090f1d;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .leaderboard-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--neon-gold);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 5px;
+        }
+
+        .leaderboard-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            font-size: 1.1rem;
+            padding: 6px 0;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.03);
         }
 
-        .hud span strong {
-            color: var(--accent-color);
-        }
-
-        .question-box {
-            font-size: 1.4rem;
-            margin-bottom: 30px;
-            min-height: 80px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 600;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        @media (min-width: 600px) {
-            .options-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .option-btn {
-            background: var(--secondary-color);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 15px;
-            text-align: left;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.05rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            background: rgba(241, 196, 15, 0.1);
-            border-color: var(--accent-color);
-        }
-
-        .option-btn strong {
-            color: var(--accent-color);
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        .option-btn.correct {
-            background-color: var(--success-color) !important;
-            border-color: var(--success-color);
-            color: white;
-        }
-
-        .option-btn.wrong {
-            background-color: var(--danger-color) !important;
-            border-color: var(--danger-color);
-            color: white;
-        }
-
-        /* Helplines */
-        .help-section {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .help-btn {
-            background: #34495e;
-            color: white;
-            font-size: 0.9rem;
-            padding: 8px 15px;
-            border-radius: 5px;
-        }
-
-        .help-btn:disabled {
-            background: #2c3e50;
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
+        .leaderboard-item:last-child { border: none; }
 
         /* Loader */
         .loader {
-            border: 5px solid rgba(255,255,255,0.1);
+            border: 4px solid rgba(0, 240, 255, 0.1);
+            border-top: 4px solid var(--neon-blue);
             border-radius: 50%;
-            border-top: 5px solid var(--accent-color);
-            width: 50px;
-            height: 50px;
+            width: 40px; height: 40px;
             animation: spin 1s linear infinite;
             margin: 20px auto;
             display: none;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .error-msg {
-            color: var(--danger-color);
-            margin-top: 10px;
-            font-weight: bold;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .error-feedback { color: var(--neon-red); margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Show do Milhão AI</h1>
-
-        <div id="setup-screen" class="screen active">
-            <div class="form-group">
-                <label for="api-key">Sua Gemini API Key:</label>
-                <input type="password" id="api-key" placeholder="AIzaSy...">
-                <small style="color: #bbb; display:block; margin-top:5px;">
-                    Obtenha uma chave gratuita no <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent-color);">Google AI Studio</a>.
-                </small>
-            </div>
-            <div class="form-group">
-                <label for="theme">Tema das Perguntas:</label>
-                <input type="text" id="theme" value="Conhecimentos Gerais" placeholder="Ex: Star Wars, História do Brasil, Programação...">
-            </div>
-            <button onclick="startGame()">Iniciar Jogo</button>
-            <div id="setup-loader" class="loader"></div>
-            <div id="setup-error" class="error-msg"></div>
+    <div class="game-wrapper">
+        <!-- Cabeçalho Global -->
+        <div class="game-header">
+            <div class="game-title">Show do Milhão</div>
+            <button class="config-trigger" onclick="toggleModal(true)" title="Configurações do Desenvolvedor">⚙️</button>
         </div>
 
-        <div id="game-screen" class="screen">
-            <div class="hud">
-                <span>Pergunta: <strong id="current-question-num">1/10</strong></span>
-                <span>Prêmio Atual: <strong id="current-prize">R$ 0</strong></span>
+        <!-- TELA 1: MENU PRINCIPAL / SELEÇÃO DE TEMA -->
+        <div id="screen-menu" class="screen active">
+            <div style="text-align: center; margin-bottom: 25px; color: var(--text-dim);">
+                Desafie a inteligência artificial respondendo a 10 perguntas rumo ao topo!
             </div>
+            <div class="input-group">
+                <label for="game-theme">Escolha o Tema da Partida:</label>
+                <input type="text" id="game-theme" value="Conhecimentos Gerais" placeholder="Ex: Marvel, Geografia, Medicina, História...">
+            </div>
+            <button class="btn-action" onclick="initiateGame()">Começar Desafio</button>
+            <div id="menu-loader" class="loader"></div>
+            <div id="menu-error" class="error-feedback"></div>
 
-            <div class="question-box" id="question-text">
-                Carregando pergunta premiada...
+            <!-- Painel de Recordes Visível no Menu -->
+            <div class="leaderboard-box">
+                <div class="leaderboard-title">🏆 Maiores Pontuações Recentes</div>
+                <div id="leaderboard-entries">
+                    <div style="color: var(--text-dim); font-size: 0.85rem;">Nenhum recorde registrado ainda.</div>
+                </div>
             </div>
-
-            <div class="options-grid">
-                <button class="option-btn" onclick="checkAnswer(0)"><strong>A</strong> <span id="opt0"></span></button>
-                <button class="option-btn" onclick="checkAnswer(1)"><strong>B</strong> <span id="opt1"></span></button>
-                <button class="option-btn" onclick="checkAnswer(2)"><strong>C</strong> <span id="opt2"></span></button>
-                <button class="option-btn" onclick="checkAnswer(3)"><strong>D</strong> <span id="opt3"></span></button>
-            </div>
-
-            <div class="help-section">
-                <button id="btn-cards" class="help-btn" onclick="useCards()">Cartas (Elimina opções)</button>
-                <button id="btn-skip" class="help-btn" onclick="useSkip()">Pular Pergunta</button>
-                <button class="help-btn" style="background:#e74c3c; color:white;" onclick="stopGame()">Parar</button>
-            </div>
-            <div id="game-loader" class="loader"></div>
         </div>
 
-        <div id="end-screen" class="screen">
-            <h2 id="end-title" style="margin-bottom: 20px; color: var(--accent-color);">Fim de Jogo!</h2>
-            <p style="font-size: 1.3rem; margin-bottom: 30px;" id="end-message"></p>
-            <button onclick="restartGame()">Jogar Novamente</button>
+        <!-- TELA 2: QUADRO DE JOGO ATIVO -->
+        <div id="screen-game" class="screen">
+            <div class="game-hud">
+                <div class="hud-card">
+                    <div class="hud-label">Nível Atual</div>
+                    <div class="hud-value" id="hud-question-number">1/10</div>
+                </div>
+                <div class="hud-card">
+                    <div class="hud-label">Valendo</div>
+                    <div class="hud-value" id="hud-prize-value">R$ 0</div>
+                </div>
+            </div>
+
+            <div class="question-container" id="display-question">
+                Carregando dados da inteligência artificial...
+            </div>
+
+            <div class="options-list">
+                <button class="option-card" onclick="submitChoice(0)"><span class="option-prefix">A</span><span id="label-opt0"></span></button>
+                <button class="option-card" onclick="submitChoice(1)"><span class="option-prefix">B</span><span id="label-opt1"></span></button>
+                <button class="option-card" onclick="submitChoice(2)"><span class="option-prefix">C</span><span id="label-opt2"></span></button>
+                <button class="option-card" onclick="submitChoice(3)"><span class="option-prefix">D</span><span id="label-opt3"></span></button>
+            </div>
+
+            <div class="game-controls">
+                <button id="ctrl-cards" class="btn-utility" onclick="triggerCards()">🃏 Cartas</button>
+                <button id="ctrl-skip" class="btn-utility" onclick="triggerSkip()">⏭️ Pular</button>
+                <button class="btn-utility" style="background: #2b161d; border-color: rgba(255,49,49,0.2);" onclick="abortGame()">🏳️ Parar</button>
+            </div>
+            <div id="game-action-loader" class="loader"></div>
+        </div>
+
+        <!-- TELA 3: TELA DE RESULTADO / FIM DE JOGO -->
+        <div id="screen-end" class="screen" style="text-align: center;">
+            <h2 id="end-status-title" style="margin-bottom: 15px; font-size: 1.8rem;">Fim de Jogo</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 25px;" id="end-status-body"></p>
+
+            <!-- Registro de Placar Opcional -->
+            <div id="score-registry-box" style="margin-bottom: 25px; background: #090f1d; padding: 15px; border-radius: 10px;">
+                <label for="player-name">Salve seu Recorde no Placar:</label>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <input type="text" id="player-name" placeholder="Seu Nome/Nick" style="padding: 10px;">
+                    <button class="btn-action" style="width: auto; padding: 10px 20px; font-size: 0.9rem;" onclick="saveScore()">Salvar</button>
+                </div>
+                <div id="registry-feedback" style="font-size: 0.8rem; margin-top: 5px; color: var(--neon-green)"></div>
+            </div>
+
+            <button class="btn-action" onclick="goToMenu()">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <!-- MODAL DISCRETO PARA CONFIGURAÇÃO DE API KEY -->
+    <div id="config-modal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 15px; color: var(--neon-blue);">Configurações da API</h3>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px;">
+                Insira sua chave do Gemini. Ela fica salva apenas localmente no seu próprio navegador.
+            </p>
+            <div class="input-group">
+                <label for="gemini-api-key">Gemini API Key:</label>
+                <input type="password" id="gemini-api-key" placeholder="AIzaSy...">
+            </div>
+            <button class="btn-action" style="padding: 10px; font-size: 0.95rem; margin-bottom: 10px;" onclick="saveApiKey()">Salvar Chave</button>
+            <button class="btn-utility" style="width: 100%;" onclick="toggleModal(false)">Fechar</button>
         </div>
     </div>
 
     <script>
-        // Configurações do Jogo
-        const prizes = [
+        // Definição de Prêmios Fictícios
+        const scorePrizes = [
             "R$ 1.000", "R$ 5.000", "R$ 10.000", "R$ 50.000", "R$ 100.000",
             "R$ 300.000", "R$ 500.000", "R$ 800.000", "R$ 900.000", "R$ 1 MILHÃO"
         ];
-        
-        let gameState = {
-            apiKey: "",
-            theme: "",
-            currentLevel: 0, 
-            questions: [],
-            currentQuestion: null,
-            canPlay: true,
-            helps: { cards: true, skip: true }
+
+        let runtimeState = {
+            apiKey: "", theme: "", currentLevel: 0,
+            questions: [], currentQuestion: null, isActive: true,
+            perks: { cards: true, skip: true }
         };
 
-        // Gerencia telas
-        function showScreen(screenId) {
+        // Ao Inicializar a Página
+        window.addEventListener('DOMContentLoaded', () => {
+            const storedKey = localStorage.getItem('gemini_game_key');
+            if (storedKey) {
+                document.getElementById('gemini-api-key').value = storedKey;
+                runtimeState.apiKey = storedKey;
+            }
+            refreshLeaderboardDisplay();
+        });
+
+        function toggleModal(open) {
+            document.getElementById('config-modal').style.display = open ? 'flex' : 'none';
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('gemini-api-key').value.trim();
+            if (key) {
+                localStorage.setItem('gemini_game_key', key);
+                runtimeState.apiKey = key;
+                alert("Chave salva com sucesso!");
+                toggleModal(false);
+            }
+        }
+
+        function navigateTo(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
         }
 
-        // Requisição para a API do Gemini
+        // Chamada de API estruturada
         async function fetchQuestionsFromAI(apiKey, theme) {
-            // Usando o modelo estável mais recente do Gemini 2.5 Flash
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-            
-            const prompt = `Gere uma lista com exatamente 10 perguntas de múltipla escolha sobre o tema: "${theme}". 
-            As perguntas devem ir progredindo em nível de dificuldade (as primeiras fáceis, as últimas muito difíceis).
-            Retorne RIGOROSAMENTE apenas um array no formato JSON puro, sem marcações markdown de bloco de código (como \`\`\`json).
-            Cada objeto do array deve ter o seguinte formato de propriedades:
-            {
-                "question": "Texto da pergunta aqui?",
-                "options": ["Opção A", "Opção B", "Opção C", "Opção D"],
-                "correct": 0
-            }
-            Onde "correct" é o índice da resposta certa (0 para A, 1 para B, 2 para C ou 3 para D).`;
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const queryPrompt = `Gere uma lista sequencial de exatamente 10 perguntas de múltipla escolha sobre o tema: "${theme}". 
+            A dificuldade deve progredir gradativamente (nível 1 muito simples até o nível 10 nível mestre).
+            Retorne RIGOROSAMENTE apenas a string de um array JSON puro, sem invólucros markdown (```json).
+            Estrutura obrigatória por item do array:
+            {"question": "Sentença da pergunta?", "options": ["Item 0", "Item 1", "Item 2", "Item 3"], "correct": 0}`;
 
-            const response = await fetch(url, {
+            const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
+                    contents: [{ parts: [{ text: queryPrompt }] }],
                     generationConfig: { responseMimeType: "application/json" }
                 })
             });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || "Falha na comunicação com o Gemini.");
+            if (!res.ok) {
+                throw new Error("Verifique se inseriu uma API Key válida clicando na engrenagem.");
             }
 
-            const data = await response.json();
-            let textResponse = data.candidates[0].content.parts[0].text.trim();
-            
-            // Sanitização preventiva caso o modelo ignore a instrução de ocultar o markdown
-            if(textResponse.startsWith("```")) {
-                textResponse = textResponse.replace(/```json|```/g, "").trim();
+            const payload = await res.json();
+            let parsedText = payload.candidates[0].content.parts[0].text.trim();
+            if(parsedText.startsWith("```")) {
+                parsedText = parsedText.replace(/```json|
+```/g, "").trim();
             }
-
-            return JSON.parse(textResponse);
+            return JSON.parse(parsedText);
         }
 
-        async function startGame() {
-            const apiKeyInput = document.getElementById('api-key').value.trim();
-            const themeInput = document.getElementById('theme').value.trim() || "Conhecimentos Gerais";
-            const errorDiv = document.getElementById('setup-error');
-            const loader = document.getElementById('setup-loader');
+        async function initiateGame() {
+            const themeValue = document.getElementById('game-theme').value.trim() || "Conhecimentos Gerais";
+            const errField = document.getElementById('menu-error');
+            const loaderElement = document.getElementById('menu-loader');
 
-            if (!apiKeyInput) {
-                errorDiv.innerText = "Por favor, insira a sua Gemini API Key.";
+            if (!runtimeState.apiKey) {
+                errField.innerHTML = "⚠️ Chave de API ausente! Clique no ícone de engrenagem ⚙️ no topo para configurar antes de jogar.";
                 return;
             }
 
-            errorDiv.innerText = "";
-            loader.style.display = "block";
+            errField.innerText = "";
+            loaderElement.style.display = "block";
 
             try {
-                const questions = await fetchQuestionsFromAI(apiKeyInput, themeInput);
-                
-                if(!Array.isArray(questions) || questions.length < 10) {
-                    throw new Error("A IA gerou um formato inválido. Tente iniciar o jogo novamente.");
-                }
+                const dataSet = await fetchQuestionsFromAI(runtimeState.apiKey, themeValue);
+                if(!Array.isArray(dataSet) || dataSet.length < 10) throw new Error("A IA gerou dados fragmentados. Tente novamente.");
 
-                gameState.apiKey = apiKeyInput;
-                gameState.theme = themeInput;
-                gameState.questions = questions;
-                gameState.currentLevel = 0;
-                gameState.helps = { cards: true, skip: true };
+                runtimeState.theme = themeValue;
+                runtimeState.questions = dataSet;
+                runtimeState.currentLevel = 0;
+                runtimeState.perks = { cards: true, skip: true };
 
-                loader.style.display = "none";
-                showScreen('game-screen');
-                renderQuestion();
-
-            } catch (error) {
-                console.error(error);
-                loader.style.display = "none";
-                errorDiv.innerText = "Erro ao carregar perguntas: " + error.message;
+                loaderElement.style.display = "none";
+                navigateTo('screen-game');
+                buildQuestionRound();
+            } catch (e) {
+                console.error(e);
+                loaderElement.style.display = "none";
+                errField.innerText = e.message;
             }
         }
 
-        function renderQuestion() {
-            gameState.canPlay = true;
-            resetOptionStyles();
+        function buildQuestionRound() {
+            runtimeState.isActive = true;
+            clearOptionVisuals();
 
-            // Atualiza botões de ajuda visivelmente
-            document.getElementById('btn-cards').disabled = !gameState.helps.cards;
-            document.getElementById('btn-skip').disabled = !gameState.helps.skip;
+            document.getElementById('ctrl-cards').disabled = !runtimeState.perks.cards;
+            document.getElementById('ctrl-skip').disabled = !runtimeState.perks.skip;
 
-            if (gameState.currentLevel >= 10) {
-                winGame();
+            if (runtimeState.currentLevel >= 10) {
+                triggerEndgame(true, "VITORIA_TOTAL");
                 return;
             }
 
-            gameState.currentQuestion = gameState.questions[gameState.currentLevel];
-
-            document.getElementById('current-question-num').innerText = `${gameState.currentLevel + 1}/10`;
-            document.getElementById('current-prize').innerText = prizes[gameState.currentLevel];
-            document.getElementById('question-text').innerText = gameState.currentQuestion.question;
+            runtimeState.currentQuestion = runtimeState.questions[runtimeState.currentLevel];
+            document.getElementById('hud-question-number').innerText = `${runtimeState.currentLevel + 1}/10`;
+            document.getElementById('hud-prize-value').innerText = scorePrizes[runtimeState.currentLevel];
+            document.getElementById('display-question').innerText = runtimeState.currentQuestion.question;
 
             for (let i = 0; i < 4; i++) {
-                document.getElementById(`opt${i}`).innerText = gameState.currentQuestion.options[i];
-                document.getElementById(`opt${i}`).parentElement.style.visibility = "visible";
+                document.getElementById(`label-opt${i}`).innerText = runtimeState.currentQuestion.options[i];
+                document.getElementById(`label-opt${i}`).parentElement.style.visibility = "visible";
             }
         }
 
-        function checkAnswer(selectedIndex) {
-            if (!gameState.canPlay) return;
-            gameState.canPlay = false;
+        function submitChoice(chosenIdx) {
+            if (!runtimeState.isActive) return;
+            runtimeState.isActive = false;
 
-            const correctIndex = gameState.currentQuestion.correct;
-            const buttons = document.querySelectorAll('.option-btn');
+            const rightIdx = runtimeState.currentQuestion.correct;
+            const buttons = document.querySelectorAll('.option-card');
 
-            if (selectedIndex === correctIndex) {
-                buttons[selectedIndex].classList.add('correct');
+            if (chosenIdx === rightIdx) {
+                buttons[chosenIdx].classList.add('correct');
                 setTimeout(() => {
-                    gameState.currentLevel++;
-                    if (gameState.currentLevel < 10) {
-                        renderQuestion();
-                    } else {
-                        winGame();
-                    }
+                    runtimeState.currentLevel++;
+                    if(runtimeState.currentLevel < 10) buildQuestionRound();
+                    else triggerEndgame(true, "VITORIA_TOTAL");
                 }, 1500);
             } else {
-                buttons[selectedIndex].classList.add('wrong');
-                buttons[correctIndex].classList.add('correct');
+                buttons[chosenIdx].classList.add('wrong');
+                buttons[rightIdx].classList.add('correct');
                 setTimeout(() => {
-                    gameOver();
+                    triggerEndgame(false, "ERRO");
                 }, 2000);
             }
         }
 
-        // Ajuda: Cartas (Elimina aleatoriamente entre 1 e 2 alternativas erradas)
-        function useCards() {
-            if (!gameState.helps.cards || !gameState.canPlay) return;
-            gameState.helps.cards = false;
-            document.getElementById('btn-cards').disabled = true;
+        function triggerCards() {
+            if (!runtimeState.perks.cards || !runtimeState.isActive) return;
+            runtimeState.perks.cards = false;
+            document.getElementById('ctrl-cards').disabled = true;
 
-            const correct = gameState.currentQuestion.correct;
-            let wrongIndexes = [0, 1, 2, 3].filter(i => i !== correct);
+            const targetRight = runtimeState.currentQuestion.correct;
+            let indicesErrados = [0, 1, 2, 3].filter(idx => idx !== targetRight);
             
-            // Sorteia para remover 1 ou 2 opções erradas da tela
-            const itemsToRemove = Math.floor(Math.random() * 2) + 1; 
-            for(let i = 0; i < itemsToRemove; i++) {
-                const randIdx = Math.floor(Math.random() * wrongIndexes.length);
-                const removedId = wrongIndexes.splice(randIdx, 1)[0];
-                document.getElementById(`opt${removedId}`).parentElement.style.visibility = "hidden";
+            const numRemover = Math.floor(Math.random() * 2) + 1;
+            for(let i = 0; i < numRemover; i++) {
+                const sorteioPos = Math.floor(Math.random() * indicesErrados.length);
+                const itemRemovido = indicesErrados.splice(sortioPos, 1)[0];
+                document.getElementById(`label-opt${itemRemovido}`).parentElement.style.visibility = "hidden";
             }
         }
 
-        // Ajuda: Pular pergunta (Busca uma nova pergunta avulsa do mesmo tema na IA)
-        async function useSkip() {
-            if (!gameState.helps.skip || !gameState.canPlay) return;
-            gameState.helps.skip = false;
-            document.getElementById('btn-skip').disabled = true;
+        async function triggerSkip() {
+            if (!runtimeState.perks.skip || !runtimeState.isActive) return;
+            runtimeState.perks.skip = false;
+            document.getElementById('ctrl-skip').disabled = true;
 
-            const loader = document.getElementById('game-loader');
+            const loader = document.getElementById('game-action-loader');
             loader.style.display = "block";
-            gameState.canPlay = false;
+            runtimeState.isActive = false;
 
             try {
-                // Solicita uma pergunta de reposição
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${gameState.apiKey}`;
-                const prompt = `Gere exatamente 1 pergunta de múltipla escolha sobre o tema: "${gameState.theme}". Dificuldade correspondente ao nível intermediário/avançado. Retorne estritamente um objeto JSON puro sem tags markdown: {"question": "...", "options": ["...", "...", "...", "..."], "correct": 0}`;
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${runtimeState.apiKey}`;
+                const rawPrompt = `Gere 1 pergunta de múltipla escolha sobre o tema "${runtimeState.theme}". Retorne APENAS o objeto JSON: {"question": "...", "options": ["...", "...", "...", "..."], "correct": 0}`;
                 
-                const response = await fetch(url, {
+                const res = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
+                        contents: [{ parts: [{ text: rawPrompt }] }],
                         generationConfig: { responseMimeType: "application/json" }
                     })
                 });
 
-                const data = await response.json();
-                let textResponse = data.candidates[0].content.parts[0].text.trim();
-                if(textResponse.startsWith("```")) {
-                    textResponse = textResponse.replace(/```json|```/g, "").trim();
-                }
+                const rawObj = await res.json();
+                let txt = rawObj.candidates[0].content.parts[0].text.trim();
+                if(txt.startsWith("```")) txt = txt.replace(/```json|```/g, "").trim();
 
-                const newQuestion = JSON.parse(textResponse);
-                gameState.questions[gameState.currentLevel] = newQuestion;
-                
+                runtimeState.questions[runtimeState.currentLevel] = JSON.parse(txt);
                 loader.style.display = "none";
-                renderQuestion();
-
-            } catch (error) {
-                console.error(error);
+                buildQuestionRound();
+            } catch (err) {
                 loader.style.display = "none";
-                gameState.canPlay = true;
-                alert("Erro ao tentar pular: não conseguimos gerar uma nova pergunta.");
+                runtimeState.isActive = true;
+                alert("Falha ao pular: Erro ao gerar pergunta substituta.");
             }
         }
 
-        function stopGame() {
-            if(!gameState.canPlay) return;
-            const prizeEarned = gameState.currentLevel === 0 ? "R$ 0" : prizes[gameState.currentLevel - 1];
-            showScreen('end-screen');
-            document.getElementById('end-title').innerText = "Você Parou!";
-            document.getElementById('end-message').innerText = `Você agiu com sabedoria e levou para casa: ${prizeEarned}!`;
+        function abortGame() {
+            if(!runtimeState.isActive) return;
+            triggerEndgame(true, "PAROU");
         }
 
-        function gameOver() {
-            let prizeEarned = "R$ 0";
-            if (gameState.currentLevel >= 5) prizeEarned = "R$ 50.000"; // Margem de segurança fictícia do jogo
+        function triggerEndgame(safetyClaim, reason) {
+            navigateTo('screen-end');
+            document.getElementById('player-name').value = "";
+            document.getElementById('registry-feedback').innerText = "";
+            document.getElementById('score-registry-box').style.display = "block";
+
+            const titleNode = document.getElementById('end-status-title');
+            const bodyNode = document.getElementById('end-status-body');
+
+            if(reason === "VITORIA_TOTAL") {
+                titleNode.innerText = "🏆 MITOU! IMPRESSIONANTE!";
+                titleNode.style.color = var(--neon-green);
+                bodyNode.innerText = "Você superou todas as barreiras do conhecimento e faturou R$ 1 MILHÃO!";
+            } else if (reason === "PAROU") {
+                titleNode.innerText = "🏳️ Estratégia e Sabedoria";
+                titleNode.style.color = var(--neon-gold);
+                const finalGift = runtimeState.currentLevel === 0 ? "R$ 0" : scorePrizes[runtimeState.currentLevel - 1];
+                bodyNode.innerText = `Você decidiu retirar-se do palco estratégico levando consigo: ${finalGift}.`;
+            } else {
+                titleNode.innerText = "❌ GAME OVER";
+                titleNode.style.color = var(--neon-red);
+                const penaltyGift = runtimeState.currentLevel >= 5 ? "R$ 50.000" : "R$ 0";
+                bodyNode.innerText = `Infelizmente a sua resposta estava incorreta. Você sai da competição com ${penaltyGift}.`;
+            }
+        }
+
+        // Persistência de Placar Local (Leaderboard)
+        function saveScore() {
+            const inputName = document.getElementById('player-name').value.trim() || "Anônimo";
+            const finalCashScore = runtimeState.currentLevel === 0 ? "R$ 0" : scorePrizes[runtimeState.currentLevel - 1];
             
-            showScreen('end-screen');
-            document.getElementById('end-title').innerText = "Você Errou!";
-            document.getElementById('end-message').innerText = `Infelizmente a resposta não era essa. Você sai do jogo com: ${prizeEarned}`;
+            // Tratamento em caso de perda sem segurança ou vitória total
+            let calculatedScore = finalCashScore;
+            if(document.getElementById('end-status-title').innerText.includes("GAME OVER")) {
+                calculatedScore = runtimeState.currentLevel >= 5 ? "R$ 50.000" : "R$ 0";
+            } else if (runtimeState.currentLevel === 10) {
+                calculatedScore = "R$ 1 MILHÃO";
+            }
+
+            const currentLeaderboard = JSON.parse(localStorage.getItem('gemini_game_leaderboard') || "[]");
+            currentLeaderboard.push({
+                name: inputName,
+                theme: runtimeState.theme,
+                score: calculatedScore,
+                date: new Date().toLocaleDateString('pt-BR')
+            });
+
+            localStorage.setItem('gemini_game_leaderboard', JSON.stringify(currentLeaderboard));
+            document.getElementById('registry-feedback').innerText = "Pontuação salva no placar!";
+            document.getElementById('score-registry-box').style.display = "none";
+            refreshLeaderboardDisplay();
         }
 
-        function winGame() {
-            showScreen('end-screen');
-            document.getElementById('end-title').innerText = "Parabéns! O Mais Novo Milionário!";
-            document.getElementById('end-message').innerText = "Você respondeu todas as perguntas corretamente e conquistou o prêmio máximo de R$ 1 MILHÃO!";
+        function refreshLeaderboardDisplay() {
+            const storageData = JSON.parse(localStorage.getItem('gemini_game_leaderboard') || "[]");
+            const elementBox = document.getElementById('leaderboard-entries');
+
+            if(storageData.length === 0) {
+                elementBox.innerHTML = `<div style="color: var(--text-dim); font-size: 0.85rem;">Nenhum recorde registrado ainda.</div>`;
+                return;
+            }
+
+            // Exibir as últimas 5 pontuações registradas
+            const structuredHtml = storageData.reverse().slice(0, 5).map(item => `
+                <div class="leaderboard-item">
+                    <span><strong>${item.name}</strong> <small style="color:var(--text-dim)">(${item.theme})</small></span>
+                    <span style="color:var(--neon-gold); font-weight:bold;">${item.score}</span>
+                </div>
+            `).join('');
+
+            elementBox.innerHTML = structuredHtml;
         }
 
-        function resetOptionStyles() {
-            document.querySelectorAll('.option-btn').forEach(btn => {
+        function clearOptionVisuals() {
+            document.querySelectorAll('.option-card').forEach(btn => {
                 btn.classList.remove('correct', 'wrong');
             });
         }
 
-        function restartGame() {
-            document.getElementById('setup-error').innerText = "";
-            showScreen('setup-screen');
+        function goToMenu() {
+            document.getElementById('menu-error').innerText = "";
+            navigateTo('screen-menu');
         }
     </script>
 </body>
