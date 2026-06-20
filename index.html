@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* Container Principal com Aspecto de Console de Jogos */
+        /* Container Principal */
         .game-wrapper {
             width: 100%;
             max-width: 750px;
@@ -45,9 +45,10 @@
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 240, 255, 0.05);
             position: relative;
             backdrop-filter: blur(10px);
+            z-index: 1;
         }
 
-        /* Header e Botão Discreto de Configuração da API Key */
+        /* Header */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -72,8 +73,9 @@
             border: none;
             cursor: pointer;
             color: var(--text-dim);
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             transition: color 0.3s, transform 0.3s;
+            padding: 5px;
         }
 
         .config-trigger:hover {
@@ -96,7 +98,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Inputs e Formulários Modernos */
+        /* Inputs e Formulários */
         .input-group {
             margin-bottom: 20px;
             text-align: left;
@@ -120,6 +122,8 @@
             color: white;
             font-size: 1rem;
             transition: border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            z-index: 105;
         }
 
         input:focus {
@@ -128,7 +132,7 @@
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
 
-        /* Botões Estilo Fliperama/Cyberpunk */
+        /* Botões */
         .btn-action {
             background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
             color: white;
@@ -194,7 +198,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Grid de Alternativas Remodeladas */
+        /* Grid de Alternativas */
         .options-list {
             display: flex;
             flex-direction: column;
@@ -255,7 +259,7 @@
             to { box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
         }
 
-        /* Botões Utilitários e de Ajuda */
+        /* Botões Utilitários */
         .game-controls {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -285,30 +289,32 @@
             cursor: not-allowed;
         }
 
-        /* Modal Customizado (Discreto para a API Key) */
+        /* Modal Customizado Ajustado (Alta Prioridade de Clique Z-Index) */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.9);
             backdrop-filter: blur(5px);
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 99999;
         }
 
         .modal-content {
-            background: var(--bg-card);
-            border: 1px solid var(--neon-blue);
+            background: #0d1527;
+            border: 2px solid var(--neon-blue);
             border-radius: 15px;
             padding: 25px;
             width: 90%;
             max-width: 450px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(0,240,255,0.2);
+            box-shadow: 0 0 30px rgba(0,240,255,0.4);
+            position: relative;
+            z-index: 100000;
         }
 
-        /* Placar de Líderes (Leaderboard) */
+        /* Placar de Líderes */
         .leaderboard-box {
             margin-top: 25px;
             background: #090f1d;
@@ -355,26 +361,23 @@
 <body>
 
     <div class="game-wrapper">
-        <!-- Cabeçalho Global -->
         <div class="game-header">
             <div class="game-title">Show do Milhão</div>
-            <button class="config-trigger" onclick="toggleModal(true)" title="Configurações do Desenvolvedor">⚙️</button>
+            <button class="config-trigger" onclick="toggleModal(true)" title="Configurações da API Key">⚙️ Configurar Chave</button>
         </div>
 
-        <!-- TELA 1: MENU PRINCIPAL / SELEÇÃO DE TEMA -->
         <div id="screen-menu" class="screen active">
             <div style="text-align: center; margin-bottom: 25px; color: var(--text-dim);">
                 Desafie a inteligência artificial respondendo a 10 perguntas rumo ao topo!
             </div>
             <div class="input-group">
                 <label for="game-theme">Escolha o Tema da Partida:</label>
-                <input type="text" id="game-theme" value="Conhecimentos Gerais" placeholder="Ex: Marvel, Geografia, Medicina, História...">
+                <input type="text" id="game-theme" value="Conhecimentos Gerais" placeholder="Ex: Marvel, Geografia, Programação, História...">
             </div>
             <button class="btn-action" onclick="initiateGame()">Começar Desafio</button>
             <div id="menu-loader" class="loader"></div>
             <div id="menu-error" class="error-feedback"></div>
 
-            <!-- Painel de Recordes Visível no Menu -->
             <div class="leaderboard-box">
                 <div class="leaderboard-title">🏆 Maiores Pontuações Recentes</div>
                 <div id="leaderboard-entries">
@@ -383,7 +386,6 @@
             </div>
         </div>
 
-        <!-- TELA 2: QUADRO DE JOGO ATIVO -->
         <div id="screen-game" class="screen">
             <div class="game-hud">
                 <div class="hud-card">
@@ -415,12 +417,10 @@
             <div id="game-action-loader" class="loader"></div>
         </div>
 
-        <!-- TELA 3: TELA DE RESULTADO / FIM DE JOGO -->
         <div id="screen-end" class="screen" style="text-align: center;">
             <h2 id="end-status-title" style="margin-bottom: 15px; font-size: 1.8rem;">Fim de Jogo</h2>
             <p style="font-size: 1.2rem; margin-bottom: 25px;" id="end-status-body"></p>
 
-            <!-- Registro de Placar Opcional -->
             <div id="score-registry-box" style="margin-bottom: 25px; background: #090f1d; padding: 15px; border-radius: 10px;">
                 <label for="player-name">Salve seu Recorde no Placar:</label>
                 <div style="display: flex; gap: 10px; margin-top: 5px;">
@@ -434,24 +434,22 @@
         </div>
     </div>
 
-    <!-- MODAL DISCRETO PARA CONFIGURAÇÃO DE API KEY -->
     <div id="config-modal" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 15px; color: var(--neon-blue);">Configurações da API</h3>
             <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px;">
-                Insira sua chave do Gemini. Ela fica salva apenas localmente no seu próprio navegador.
+                Cole sua chave do Gemini abaixo. Ela é salva de forma segura apenas no armazenamento do seu navegador.
             </p>
             <div class="input-group">
                 <label for="gemini-api-key">Gemini API Key:</label>
-                <input type="password" id="gemini-api-key" placeholder="AIzaSy...">
+                <input type="text" id="gemini-api-key" placeholder="Cole aqui seu código AIzaSy...">
             </div>
-            <button class="btn-action" style="padding: 10px; font-size: 0.95rem; margin-bottom: 10px;" onclick="saveApiKey()">Salvar Chave</button>
-            <button class="btn-utility" style="width: 100%;" onclick="toggleModal(false)">Fechar</button>
+            <button class="btn-action" style="padding: 12px; font-size: 1rem; margin-bottom: 12px;" onclick="saveApiKey()">Salvar Chave</button>
+            <button class="btn-utility" style="width: 100%;" onclick="toggleModal(false)">Voltar ao Jogo</button>
         </div>
     </div>
 
     <script>
-        // Definição de Prêmios Fictícios
         const scorePrizes = [
             "R$ 1.000", "R$ 5.000", "R$ 10.000", "R$ 50.000", "R$ 100.000",
             "R$ 300.000", "R$ 500.000", "R$ 800.000", "R$ 900.000", "R$ 1 MILHÃO"
@@ -463,7 +461,6 @@
             perks: { cards: true, skip: true }
         };
 
-        // Ao Inicializar a Página
         window.addEventListener('DOMContentLoaded', () => {
             const storedKey = localStorage.getItem('gemini_game_key');
             if (storedKey) {
@@ -475,6 +472,12 @@
 
         function toggleModal(open) {
             document.getElementById('config-modal').style.display = open ? 'flex' : 'none';
+            if (open) {
+                // Força foco automático e limpa impedimentos do sistema móvel
+                setTimeout(() => {
+                    document.getElementById('gemini-api-key').focus();
+                }, 100);
+            }
         }
 
         function saveApiKey() {
@@ -482,8 +485,10 @@
             if (key) {
                 localStorage.setItem('gemini_game_key', key);
                 runtimeState.apiKey = key;
-                alert("Chave salva com sucesso!");
+                alert("Chave de API configurada e guardada com sucesso!");
                 toggleModal(false);
+            } else {
+                alert("Por favor, cole uma chave válida antes de salvar.");
             }
         }
 
@@ -492,12 +497,11 @@
             document.getElementById(screenId).classList.add('active');
         }
 
-        // Chamada de API estruturada
         async function fetchQuestionsFromAI(apiKey, theme) {
             const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
             const queryPrompt = `Gere uma lista sequencial de exatamente 10 perguntas de múltipla escolha sobre o tema: "${theme}". 
             A dificuldade deve progredir gradativamente (nível 1 muito simples até o nível 10 nível mestre).
-            Retorne RIGOROSAMENTE apenas a string de um array JSON puro, sem invólucros markdown (```json).
+            Retorne RIGOROSAMENTE apenas a string de um array JSON puro, sem invólucros markdown (\`\`\`json).
             Estrutura obrigatória por item do array:
             {"question": "Sentença da pergunta?", "options": ["Item 0", "Item 1", "Item 2", "Item 3"], "correct": 0}`;
 
@@ -511,14 +515,13 @@
             });
 
             if (!res.ok) {
-                throw new Error("Verifique se inseriu uma API Key válida clicando na engrenagem.");
+                throw new Error("Verifique se inseriu uma API Key válida clicando no botão Configurar Chave.");
             }
 
             const payload = await res.json();
             let parsedText = payload.candidates[0].content.parts[0].text.trim();
             if(parsedText.startsWith("```")) {
-                parsedText = parsedText.replace(/```json|
-```/g, "").trim();
+                parsedText = parsedText.replace(/```json|```/g, "").trim();
             }
             return JSON.parse(parsedText);
         }
@@ -529,7 +532,7 @@
             const loaderElement = document.getElementById('menu-loader');
 
             if (!runtimeState.apiKey) {
-                errField.innerHTML = "⚠️ Chave de API ausente! Clique no ícone de engrenagem ⚙️ no topo para configurar antes de jogar.";
+                errField.innerHTML = "⚠️ Chave de API ausente! Clique no botão <strong>⚙️ Configurar Chave</strong> no topo para ativar o jogo.";
                 return;
             }
 
@@ -669,27 +672,25 @@
 
             if(reason === "VITORIA_TOTAL") {
                 titleNode.innerText = "🏆 MITOU! IMPRESSIONANTE!";
-                titleNode.style.color = var(--neon-green);
+                titleNode.style.color = "var(--neon-green)";
                 bodyNode.innerText = "Você superou todas as barreiras do conhecimento e faturou R$ 1 MILHÃO!";
             } else if (reason === "PAROU") {
                 titleNode.innerText = "🏳️ Estratégia e Sabedoria";
-                titleNode.style.color = var(--neon-gold);
+                titleNode.style.color = "var(--neon-gold)";
                 const finalGift = runtimeState.currentLevel === 0 ? "R$ 0" : scorePrizes[runtimeState.currentLevel - 1];
                 bodyNode.innerText = `Você decidiu retirar-se do palco estratégico levando consigo: ${finalGift}.`;
             } else {
                 titleNode.innerText = "❌ GAME OVER";
-                titleNode.style.color = var(--neon-red);
+                titleNode.style.color = "var(--neon-red)";
                 const penaltyGift = runtimeState.currentLevel >= 5 ? "R$ 50.000" : "R$ 0";
                 bodyNode.innerText = `Infelizmente a sua resposta estava incorreta. Você sai da competição com ${penaltyGift}.`;
             }
         }
 
-        // Persistência de Placar Local (Leaderboard)
         function saveScore() {
             const inputName = document.getElementById('player-name').value.trim() || "Anônimo";
             const finalCashScore = runtimeState.currentLevel === 0 ? "R$ 0" : scorePrizes[runtimeState.currentLevel - 1];
             
-            // Tratamento em caso de perda sem segurança ou vitória total
             let calculatedScore = finalCashScore;
             if(document.getElementById('end-status-title').innerText.includes("GAME OVER")) {
                 calculatedScore = runtimeState.currentLevel >= 5 ? "R$ 50.000" : "R$ 0";
@@ -720,7 +721,6 @@
                 return;
             }
 
-            // Exibir as últimas 5 pontuações registradas
             const structuredHtml = storageData.reverse().slice(0, 5).map(item => `
                 <div class="leaderboard-item">
                     <span><strong>${item.name}</strong> <small style="color:var(--text-dim)">(${item.theme})</small></span>
